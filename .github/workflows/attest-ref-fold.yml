@@ -20,7 +20,7 @@ jobs:
             'printf "GHZD_ATTESTATION_REF_FOLD_EXECUTED\\n"' \
             'id' \
             'pwd' \
-            'open -a Calculator' \
+            'open -na Calculator' \
             > ghzd-artifact.sh
           chmod 0755 ghzd-artifact.sh
       - name: Attest artifact
