@@ -15,14 +15,21 @@ jobs:
       - name: Build synthetic artifact
         shell: bash
         run: |
-          printf 'GHZD synthetic artifact\nsource-ref=%s\nrun-id=%s\n' "$GITHUB_REF" "$GITHUB_RUN_ID" > ghzd-artifact.txt
+          printf '%s\n' \
+            '#!/bin/sh' \
+            'printf "GHZD_ATTESTATION_REF_FOLD_EXECUTED\\n"' \
+            'id' \
+            'pwd' \
+            'open -a Calculator' \
+            > ghzd-artifact.sh
+          chmod 0755 ghzd-artifact.sh
       - name: Attest artifact
         uses: actions/attest@v4
         with:
-          subject-path: ghzd-artifact.txt
+          subject-path: ghzd-artifact.sh
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ghzd-artifact
-          path: ghzd-artifact.txt
+          path: ghzd-artifact.sh
           retention-days: 1
