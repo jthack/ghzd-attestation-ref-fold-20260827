@@ -1,0 +1,28 @@
+name: GHZD attestation ref-fold proof
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
+jobs:
+  attest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build synthetic artifact
+        shell: bash
+        run: |
+          printf 'GHZD synthetic artifact\nsource-ref=%s\nrun-id=%s\n' "$GITHUB_REF" "$GITHUB_RUN_ID" > ghzd-artifact.txt
+      - name: Attest artifact
+        uses: actions/attest@v4
+        with:
+          subject-path: ghzd-artifact.txt
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ghzd-artifact
+          path: ghzd-artifact.txt
+          retention-days: 1
